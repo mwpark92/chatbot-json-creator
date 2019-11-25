@@ -1,5 +1,10 @@
 # navertalk
 
+## 배포 확인
+```
+https://zen-panini-3229fd.netlify.com/
+```
+
 ## Project setup
 ```
 yarn install
