@@ -15,9 +15,6 @@ export default new Vuex.Store({
   },
   mutations: {
     resetChatbotJSON(state, type) {
-      /* eslint-disable no-console */
-      console.log(type);
-      /* eslint-enable no-console */
       switch (type) {
         case "TEXT_CONTENT":
           state.chatbotJSON = {
