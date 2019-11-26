@@ -11,8 +11,9 @@
       <li>하나의 composite에 "타이틀", "설명", "요소 리스트" 중 적어도 한 개의 속성은 존재해야 합니다.</li>
       <li>하나의 composite에 "타이틀", "설명", "요소 리스트", "이미지", "버튼" 중 적어도 두 개의 속성이 존재해야 합니다.</li>
     </ul>
-    <v-btn small color="primary" class="add-composite-button">+카드 추가</v-btn>
-    <Composite class="composite"></Composite>
+    <v-btn v-show="compositeList.length < 10" small color="primary" class="add-composite-button" @click="onClickAddCompositeButton">
+      <v-icon>mdi-plus</v-icon>카드 추가</v-btn>
+    <Composite :index="index" v-for="(composite, index) in compositeList" v-bind:key="index" class="composite"></Composite>
   </v-card>
 </template>
 
@@ -20,9 +21,26 @@
 import Composite from "./Composite";
 
 export default {
-    components: {
-        Composite,
-    },
+  components: {
+    Composite,
+  },
+  data() {
+    return {
+    }
+  },
+  computed: {
+    compositeList() {
+      return this.$store.state.chatbotJSON.compositeContent.compositeList;
+    }
+  },
+  created() {
+    this.$store.commit("resetChatbotJSON", "COMPOSITE_CONTENT");
+  },
+  methods: {
+    onClickAddCompositeButton() {
+      this.$store.commit('addComposite');
+    }
+  },
 };
 </script>
 
@@ -49,10 +67,10 @@ export default {
 }
 
 .add-composite-button {
-    margin: 0 24px 24px 24px;
+  margin: 0 24px 24px 24px;
 }
 
 .composite {
-    margin: 0 24px 24px 24px;
+  margin: 0 24px 24px 24px;
 }
 </style>
