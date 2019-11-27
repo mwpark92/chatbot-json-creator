@@ -5,8 +5,11 @@
         <v-layout>
           <v-list-item-title class="headline mb-1">Composite</v-list-item-title>
           <div class="close-icon">
-            <v-icon @click="onClickDeleteIcon">mdi-close</v-icon>
+            <v-btn @click="onClickDeleteIcon">mdi-close</v-btn>
           </div>
+          <!-- <div class="close-icon">
+            <v-icon @click="onClickDeleteIcon">mdi-close</v-icon>
+          </div>-->
         </v-layout>
       </v-list-item-content>
     </v-list-item>
@@ -23,19 +26,29 @@
       <v-card-text class="sub-title">
         <p class="sub-title-value">타이틀</p>
       </v-card-text>
-      <v-textarea class="text-content-value" counter="200" maxlength="200"></v-textarea>
+      <v-textarea
+        class="text-content-value"
+        counter="200"
+        maxlength="200"
+        v-model="compositeData.title"
+      ></v-textarea>
     </div>
     <div v-if="isDescriptionOn">
       <v-card-text class="sub-title">
         <p class="sub-title-value">설명</p>
       </v-card-text>
-      <v-textarea class="text-content-value" counter="1000" maxlength="1000"></v-textarea>
+      <v-textarea
+        class="text-content-value"
+        counter="1000"
+        maxlength="1000"
+        v-model="compositeData.description"
+      ></v-textarea>
     </div>
     <div v-if="isImageOn">
       <v-card-text class="sub-title">
         <p class="sub-title-value">이미지URL</p>
       </v-card-text>
-      <v-text-field class="text-content-value"></v-text-field>
+      <v-text-field class="text-content-value" v-model="compositeData.image.imageUrl"></v-text-field>
     </div>
     <div v-if="isElementListOn">
       <v-row justify="space-around">
@@ -63,7 +76,7 @@ export default {
     index: {
       type: Number,
       required: true
-    },
+    }
   },
   data() {
     return {
@@ -71,16 +84,58 @@ export default {
       isDescriptionOn: true,
       isElementListOn: false,
       isImageOn: false,
-      isButtonListOn: false
-    }
+      isButtonListOn: false,
+      compositeData: {
+        title: "",
+        description: "",
+        elementList: [],
+        image: {
+          imageUrl: ""
+        },
+        buttonLIst: []
+      }
+    };
   },
-  computed: {
+  watch: {
+    compositeData: {
+      deep: true,
+      immediate: true,
+      handler: function(newValue) {
+        const trimmedComposite = this.trimComposite(newValue);
+        this.$emit("change-composite", {
+          composite: trimmedComposite,
+          index: this.index
+        });
+      }
+    }
   },
   methods: {
     onClickDeleteIcon() {
-      this.$store.commit('deleteComposite', this.index);
+      this.$store.commit("deleteComposite", this.index);
+    },
+    trimComposite(compositeData) {
+      let results = {};
+
+      if (this.isTitleOn) {
+        results.title = compositeData.title;
+      }
+      if (this.isDescriptionOn) {
+        results.description = compositeData.description;
+      }
+      if (this.isElementListOn) {
+        results.elementList = compositeData.elementList;
+      }
+      if (this.isImageOn) {
+        results.image = {};
+        results.image.imageUrl = compositeData.image.imageUrl;
+      }
+      if (this.isButtonListOn) {
+        results.buttonLIst = compositeData.buttonLIst;
+      }
+
+      return results;
     }
-  },
+  }
 };
 </script>
 

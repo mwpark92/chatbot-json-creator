@@ -55,13 +55,14 @@ export default new Vuex.Store({
     },
     addComposite(state) {
       let newComposite = {
-        title: "",
-        description: ""
       };
       state.chatbotJSON.compositeContent.compositeList.push(newComposite);
     },
     deleteComposite(state, index) {
       state.chatbotJSON.compositeContent.compositeList.splice(index, 1);
+    },
+    updateComposite(state, payload) {
+      state.chatbotJSON.compositeContent.compositeList.splice(payload.index, 1, payload.composite);
     }
   },
 
